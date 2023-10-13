@@ -32,3 +32,4 @@ msbuild.wrn
 .vs/
 
 */[Mm]igrations/[^.]*
+*/*/files/[^.]*

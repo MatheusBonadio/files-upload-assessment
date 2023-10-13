@@ -20,15 +20,14 @@ namespace Domain.Entities
         [MaxLength(2000)]
         public string Description { get; set; }
 
-        [DisplayName("Versão")]
-        [Required(ErrorMessage = "A versão é obrigatória")]
-        public int Version { get; set; }
-
         [DisplayName("Criado em")]
         public DateTime CreatedAt { get; set; }
 
         [DisplayName("Atualizado em")]
         public DateTime UpdatedAt { get; set; }
+
+        // [DisplayName("Excluído em")]
+        // public DateTime? DeletedAt { get; set; }
 
         [DisplayName("Arquivos")]
         public IList<File> Files { get; set; }

@@ -13,9 +13,13 @@ namespace Domain.Entities
         [Required(ErrorMessage = "O nome é obrigatório")]
         public string Name { get; set; }
 
-        [DisplayName("Caminho")]
-        [Required(ErrorMessage = "O caminho é obrigatório")]
-        public string Path { get; set; }
+        [DisplayName("Versão")]
+        [Required(ErrorMessage = "A versão é obrigatória")]
+        public int Version { get; set; }
+
+        [DisplayName("Extensão")]
+        [Required(ErrorMessage = "A extensão é obrigatória")]
+        public string Extension { get; set; }
 
         [DisplayName("Documento")]
         [Required(ErrorMessage = "O documento é obrigatório")]
@@ -23,7 +27,5 @@ namespace Domain.Entities
 
         [DisplayName("Criado em")]
         public DateTime CreatedAt { get; set; }
-
-        public Document Document { get; set; }
     }
 }

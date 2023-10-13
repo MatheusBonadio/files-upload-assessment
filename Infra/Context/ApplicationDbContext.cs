@@ -6,15 +6,9 @@ namespace Infra
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext()
-        {
+        public ApplicationDbContext() { }
 
-        }
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Document> Documents { get; set; }
 
@@ -22,6 +16,13 @@ namespace Infra
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<File>()
+            .Property(d => d.Version)
+            .HasDefaultValue(0);
+
+            // modelBuilder.Entity<Document>()
+            //     .HasQueryFilter(d => d.DeletedAt == null);
+
             modelBuilder.Seed();
         }
 

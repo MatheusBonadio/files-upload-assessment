@@ -1,64 +1,168 @@
 @model IEnumerable<Domain.Entities.Document>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th> @Html.DisplayNameFor(model => model.Title) </th>
-            <th> @Html.DisplayNameFor(model => model.Description) </th>
-            <th> @Html.DisplayNameFor(model => model.Files.First().Version) </th>
-            <th> @Html.DisplayNameFor(model => model.Files.First().Name) </th>
-            <th> @Html.DisplayNameFor(model => model.Files.First().Extension) </th>
-            <th> @Html.DisplayNameFor(model => model.CreatedAt) </th>
-            <th> @Html.DisplayNameFor(model => model.UpdatedAt) </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            @foreach (var document in Model)
-            {
-                <tr>
-                    <td> @document.Title </td>
-                    <td> @document.Description </td>
-                    @if (document.Files.Count > 0)
-                    {
-                        <td>@document.Files.First().Version</td>
-                        <td>@document.Files.First().Name</td>
-                        <td>@document.Files.First().Extension.ToUpper()</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                    <td> @document.CreatedAt </td>
-                    <td> @document.UpdatedAt </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@document.Id">Detalhes</a>
-                        @if (document.Files.Count > 0)
-                        {
-                            <a class="btn btn-primary" asp-action="DownloadFile"
-                                asp-route-id="@document.Files.First().Id">Download</a>
-                        }
-                        <a class="btn btn-warning" asp-action="Update" asp-route-id="@document.Id">Editar</a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@document.Id">Excluir</a>
-                    </td>
-                </tr>
-            }
-        }
-    </tbody>
+@{
+    ViewData["Title"] = "Home";
+}
 
-    <div class='box_documents'>
-        @if (Model != null)
-        {
-            @foreach (var document in Model)
+<div class='container_body'>
+    <a class='button' style='position: absolute' asp-controller='Document' asp-action='Create'>
+        <div class='material-icons'>add</div>
+        <span>CRIAR DOCUMENTO</span>
+    </a>
+
+    <div class='title' style='margin-top: 15px'>Últimos documentos (@Model.Count())</div>
+
+    <table class='table'>
+        <tbody>
+            @if (Model != null)
             {
-                <div class='documents'>
-                    <div class=''>
-                        @document.Title
-                    </div>
+                @foreach (var document in Model)
+                {
+                    <tr>
+                        <td style="min-width: 200px;">
+                            <div class='box_version'>
+                                @{
+                                    var versionValue = document.Files.First().Version == 0 ? "0.5" :
+                                    (document.Files.First().Version / 10.0
+                                    + 0.5).ToString().Replace(",", ".");
+                                }
+                                <div class='version' style='background-color: rgba(8, 102, 160, @versionValue)'>
+                                    @($"v{@document.Files.First().Version}")
+                                </div>
+                                <div class='text_limit'>@document.Title</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class='text_limit' title='@document.Description'>@document.Description</div>
+                        </td>
+                        @* <td>
+                <div class='extension'>
+                @document.Files.First().Extension
                 </div>
+                </td> *@
+                        <td>
+                            <div class='extension'>
+                                @document.Files.First().Extension
+                            </div>
+                            <div class='text_limit file_name'>@document.Files.First().Name</div>
+                        </td>
+                        <td style='text-align: center'>@document.UpdatedAt</td>
+                        <td>
+                            <div class='box_tools'>
+                                <div class='tools'>
+                                    <div class='dropdown' tabindex='1'>
+                                        <a class='db2' tabindex='1'></a>
+                                        <a class='material-icons'>more_horiz</a>
+                                        <div class='dropdown-content'>
+                                            <a asp-action='Update' asp-route-id='@document.Id'>
+                                                <i class='material-icons'>edit</i>
+                                                <span>Editar</span>
+                                            </a>
+                                            <a asp-action='Delete' asp-route-id='@document.Id'>
+                                                <i class='material-icons'>delete</i>
+                                                <span>Excluir</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class='material-icons' asp-action='DownloadFile'
+                                    asp-route-id='@document.Files.First().Id'>download</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
             }
+        </tbody>
+    </table>
+
+</div>
+
+<div class='container_side'>
+
+    <div class='title'>Detalhes</div>
+
+    <table class='table2'>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var document in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Title)</td>
+                        <td>@document.Title</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Description)</td>
+                        <td>
+                            <div>@document.Description</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.CreatedAt)</td>
+                        <td>@document.CreatedAt</td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.UpdatedAt)</td>
+                        <td>@document.UpdatedAt</td>
+                    </tr>
+
+                    break;
+                }
+            }
+        </tbody>
+    </table>
+
+    @if (Model != null)
+    {
+        @foreach (var document in Model)
+        {
+            <div style='display: flex; justify-content: flex-start;margin-bottom: 30px;'>
+                <a class='button' asp-action='Update' asp-route-id='@document.Id'>
+                    <div class='material-icons'>edit</div>
+                    <span>EDITAR</span>
+                </a>
+
+                <a class='button danger' asp-action='Delete' asp-route-id='@document.Id'>
+                    <div class='material-icons'>delete</div>
+                    <span>EXCLUIR</span>
+                </a>
+            </div>
+
+            break;
         }
-    </div>
-</table>
+    }
+
+    <div class='title'>Versões (@Model.First().Files.Count)</div>
+
+    <table class='table3'>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var document in Model)
+                {
+                    @foreach (var file in document.Files)
+                    {
+                        <tr>
+                            <td>@file.Version</td>
+                            <td>
+                                <div title="@file.Name" class='text_limit2'>@file.Name</div>
+                            </td>
+                            <td>
+                                <div class='extension'>@file.Extension</div>
+                            </td>
+                            <td> @file.CreatedAt </td>
+                            <td>
+                                <div class='box_tools'>
+                                    <a class='material-icons' asp-action='DownloadFile' asp-route-id='@file.Id'>download</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    break;
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class='image'></div>
+</div>

@@ -33,11 +33,17 @@ namespace WebUI.Controllers
 
             foreach (var document in documents)
             {
-                var lastFile = document.Files.OrderByDescending(f => f.CreatedAt).FirstOrDefault();
+                // var lastFile = document.Files.OrderByDescending(f => f.CreatedAt).FirstOrDefault();
+                // document.Files.Clear();
+
+                // if (lastFile != null)
+                //     document.Files.Add(lastFile);
+
+                var lastFile = document.Files.OrderByDescending(f => f.CreatedAt).ToList();
                 document.Files.Clear();
 
                 if (lastFile != null)
-                    document.Files.Add(lastFile);
+                    document.Files = lastFile;
             }
             return View(documents);
         }
@@ -144,7 +150,7 @@ namespace WebUI.Controllers
             _db.Documents.Update(document);
             _db.SaveChanges();
 
-            return View();
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(Document documentId)

@@ -1,0 +1,69 @@
+@model Domain.Entities.Document
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class='title'>Detalhes</div>
+
+<table class='table2'>
+    <tbody>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Title)</td>
+            <td>@Model.Title</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Description)</td>
+            <td>
+                <div>@Model.Description</div>
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.CreatedAt)</td>
+            <td>@Model.CreatedAt</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.UpdatedAt)</td>
+            <td>@Model.UpdatedAt</td>
+        </tr>
+    </tbody>
+</table>
+
+<div style='display: flex; justify-content: flex-start;margin-bottom: 30px;'>
+    <a class='button' asp-action='Update' asp-route-documentId='@Model.Id'>
+        <div class='material-icons'>edit</div>
+        <span>EDITAR</span>
+    </a>
+
+    <a class='button danger' asp-action='Delete' asp-route-documentId='@Model.Id'>
+        <div class='material-icons'>delete</div>
+        <span>EXCLUIR</span>
+    </a>
+</div>
+
+<div class='title'>Versões (@Model.Files.Count)</div>
+
+<table class='table3'>
+    <tbody>
+        @foreach (var file in Model.Files)
+        {
+            <tr>
+                <td>@file.Version</td>
+                <td>
+                    <div title="@file.Name" class='text_limit2'>@file.Name</div>
+                </td>
+                <td>
+                    <div class='extension'>@file.Extension</div>
+                </td>
+                <td> @file.CreatedAt </td>
+                <td>
+                    <div class='box_tools'>
+                        <a class='material-icons' asp-action='DownloadFile' asp-route-fileId='@file.Id'>download</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class='image'></div>

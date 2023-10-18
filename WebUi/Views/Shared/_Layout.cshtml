@@ -1,48 +1,72 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+
+<html lang='pt-br'>
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebUI</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <meta name='theme-color' content='#d9272e' />
+    <meta charset='UTF-8' />
+    <meta content='width=device-width, initial-scale=0.8' name='viewport' />
+    <title>@ViewData["Title"] - Files upload</title>
+    <link rel='shortcut icon' href="~/img/favicon.png" type='image/x-icon' />
     <link rel="stylesheet" href="~/css/site.css" />
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebUI</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+    <div class='container_header'>
+        <div class='logo flex'>
+            <div></div>
+        </div>
+        <div class='menu'>
+            <div class='category'>DOCUMENTOS</div>
+            <a class='list' asp-controller="Document" asp-action="Index">
+                <i class='material-icons'>description</i>
+                <span>Home</span>
+            </a>
+            <a class='list' asp-controller="Document" asp-action="Create">
+                <i class='material-icons'>note_add</i>
+                <span>Criar</span>
+            </a>
+            <a class='list inactive'>
+                <i class='material-icons'>edit_document</i>
+                <span>Editar</span>
+            </a>
+            <a class='list inactive'>
+                <i class='material-icons'>delete</i>
+                <span>Excluir</span>
+            </a>
+
+            <div class='category'>TECNOLOGIAS</div>
+            <a class='list inactive'>
+                <i class='material-icons'>code</i>
+                <span>.NET Core 3.1</span>
+            </a>
+            <a class='list inactive'>
+                <i class='material-icons'>source</i>
+                <span>ASP.NET Core MVC</span>
+            </a>
+            <a class='list inactive'>
+                <i class='material-icons'>storage</i>
+                <span>SQL Server</span>
+            </a>
+        </div>
+        <div class='user'>
+            <div class='image'></div>
+            <div class='info'>
+                <div>Criado por</div>
+                <a>Matheus Bonadio</a>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - WebUI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+    <div class='container_render'>
+        @RenderBody()
+    </div>
+
 </body>
+
+@RenderSection("Scripts", required: false)
+
 </html>

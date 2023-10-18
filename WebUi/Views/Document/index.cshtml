@@ -1,0 +1,135 @@
+@model IEnumerable<Domain.Entities.Document>
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+<div class='container_body'>
+
+    <div class='box_title'>
+        <a class='button' style='float: left' asp-controller='Document' asp-action='Create'>
+            <div class='material-icons'>add</div>
+            <span>CRIAR DOCUMENTO</span>
+        </a>
+    </div>
+
+    @if (Model.Count() > 0)
+    {
+        <table class='table' id="myTable">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.Files.First().Name)</th>
+                    <th style='text-align: center'>@Html.DisplayNameFor(model => model.UpdatedAt)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var document in Model)
+                {
+                    <tr id='@document.Id'>
+                        <td style="min-width: 200px;">
+                            <div class='box_version'>
+                                @{
+                                    var versionValue = document.Files.First().Version == 0 ? "0.5" :
+                                    (document.Files.First().Version / 10.0
+                                    + 0.5).ToString().Replace(",", ".");
+                                }
+                                <div class='version' style='background-color: rgba(8, 102, 160, @versionValue)'>
+                                    @($"v{@document.Files.First().Version}")
+                                </div>
+                                <div class='text_limit'>@document.Title</div>
+                            </div>
+                        </td>
+                        <td style="min-width: 150px;">
+                            <div class='text_limit' title='@document.Description'>@document.Description</div>
+                        </td>
+                        <td>
+                            <div class='extension'> @document.Files.First().Extension </div>
+                            <div class='text_limit file_name' title='@document.Files.First().Name'>@document.Files.First().Name
+                            </div>
+                        </td>
+                        <td style='text-align: center'>@document.UpdatedAt</td>
+                        <td>
+                            <div class='box_tools'>
+                                <div class='tools'>
+                                    <div class='dropdown' tabindex='1'>
+                                        <a class='db2' tabindex='1'></a>
+                                        <a class='material-icons'>more_horiz</a>
+                                        <div class='dropdown-content'>
+                                            <a asp-action='Update' asp-route-documentId='@document.Id'>
+                                                <i class='material-icons'>edit</i>
+                                                <span>Editar</span>
+                                            </a>
+                                            <a asp-action='Delete' asp-route-documentId='@document.Id'>
+                                                <i class='material-icons'>delete</i>
+                                                <span>Excluir</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class='material-icons' asp-action='DownloadFile'
+                                    asp-route-fileId='@document.Files.First().Id'>download</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class='empty'>
+            <div class='material-icons' style='margin-right: 7px'>folder_open</div>
+            <span>Nenhum documento encontrado</span>
+        </div>
+    }
+
+</div>
+
+
+@{
+    if (Model.Count() > 0)
+    {
+        <div class='container_side'>
+            <div class='content'>
+                @await Html.PartialAsync("Details", Model.First())
+            </div>
+
+            <div id="loader" class="flex" style="display: none;">
+                <svg viewBox="0 0 100 100">
+                    <circle fill="none" cx="50" cy="50" r="30"></circle>
+                </svg>
+            </div>
+        </div>
+    }
+}
+
+@section scripts {
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script>
+        menu(0);
+
+        $('#myTable').DataTable({
+            order: [[4, 'desc']],
+            "language": {
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": ">",
+                    "previous": "<"
+                },
+                "searchPlaceholder": "Pesquisar...",
+                "search": "",
+                "zeroRecords": "Nenhum documento encontrado",
+                "info": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "infoEmpty": "Mostrando de 0 até 0 de 0 registros",
+                "infoFiltered": "(Filtrado por _MAX_ registros)",
+            },
+            "pageLength": 15
+        });
+    </script>
+}

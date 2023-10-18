@@ -1,0 +1,20 @@
+@model object
+
+@{
+    ViewData["Title"] = "Erro";
+}
+
+<div class='container_body'>
+
+    <h1>
+        Ops, ocorreu um erro
+    </h1>
+    <p style='margin-top: 8px'>@ViewBag.ErrorMessage</p>
+
+    <a class='button danger' style='float: left;align-self: flex-start;margin-left: 0; margin-top: 14px;'
+        asp-controller='Document' asp-action='Index'>
+        <div class='material-icons'>arrow_back</div>
+        <span>HOME</span>
+    </a>
+
+</div>

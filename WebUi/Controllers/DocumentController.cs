@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 
 using Domain.Entities;
 using Application.Interfaces;
-using Newtonsoft.Json;
 
 namespace WebUI.Controllers
 {
@@ -40,8 +39,9 @@ namespace WebUI.Controllers
             if (ModelState.IsValid == false)
                 return View();
 
+
             if (_documentRepository.TitleExists(document))
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Error), new { errorMessage = "Já existe um documento com o título informado" });
 
             var documentId = Guid.NewGuid();
 
@@ -75,12 +75,12 @@ namespace WebUI.Controllers
         public IActionResult Update(Guid documentId)
         {
             if (documentId == Guid.Empty)
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Error), new { errorMessage = "Id do documento não informado" });
 
             var document = _documentRepository.FindById(documentId);
 
             if (document == null)
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Error), new { errorMessage = "Documento não encontrado" });
 
             return View(document);
         }
@@ -92,7 +92,7 @@ namespace WebUI.Controllers
                 return View();
 
             if (_documentRepository.TitleExists(document))
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Error), new { errorMessage = "Já existe um documento com o título informado" });
 
             if (file != null)
             {
@@ -138,14 +138,20 @@ namespace WebUI.Controllers
         public IActionResult Details(Guid documentId)
         {
             if (documentId == Guid.Empty)
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Error), new { errorMessage = "ID do documento não encontrado" });
 
             var document = _documentRepository.FindById(documentId);
 
             if (document == null)
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Error), new { errorMessage = "Documento não encontrado" });
 
             return View(document);
+        }
+
+        public IActionResult Error(string errorMessage)
+        {
+            ViewBag.ErrorMessage = errorMessage;
+            return View();
         }
 
         private bool UploadFile(IFormFile file, Guid fileId)
@@ -172,6 +178,8 @@ namespace WebUI.Controllers
             var file = _fileRepository.FindById(fileId);
             var filePath = Path.Combine(_path, file.Id + file.Extension);
 
+            file.Name ??= " ";
+
             if (System.IO.File.Exists(filePath))
             {
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -180,7 +188,7 @@ namespace WebUI.Controllers
             }
             else
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { errorMessage = "Arquivo não encontrado" });
             }
         }
     }

@@ -18,9 +18,6 @@ dotnet ef migrations add v1 --project Infra
 # Running migration on database
 dotnet ef database update --project Infra
 
-# Running unity tests
-dotnet test
-
 # Running project
 dotnet run --project WebUI
 ```

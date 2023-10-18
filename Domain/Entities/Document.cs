@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
@@ -16,7 +16,6 @@ namespace Domain.Entities
         public string Title { get; set; }
 
         [DisplayName("Descrição")]
-        [Required(ErrorMessage = "A descrição é obrigatória")]
         [MaxLength(2000)]
         public string Description { get; set; }
 
@@ -25,9 +24,6 @@ namespace Domain.Entities
 
         [DisplayName("Atualizado em")]
         public DateTime UpdatedAt { get; set; }
-
-        // [DisplayName("Excluído em")]
-        // public DateTime? DeletedAt { get; set; }
 
         [DisplayName("Arquivos")]
         public IList<File> Files { get; set; }

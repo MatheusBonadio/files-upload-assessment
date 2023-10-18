@@ -4,21 +4,37 @@
     ViewData["Title"] = "Home";
 }
 
+@* <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> *@
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
 <div class='container_body'>
-    <a class='button' style='position: absolute' asp-controller='Document' asp-action='Create'>
-        <div class='material-icons'>add</div>
-        <span>CRIAR DOCUMENTO</span>
-    </a>
 
-    <div class='title' style='margin-top: 15px'>Últimos documentos (@Model.Count())</div>
+    <div class='box_title'>
+        @* <span class='title' style='margin-top: 15px'> Últimos documentos (@Model.Count()) </span> *@
 
-    <table class='table'>
-        <tbody>
-            @if (Model != null)
-            {
+        <a class='button' style='float: left' asp-controller='Document' asp-action='Create'>
+            <div class='material-icons'>add</div>
+            <span>CRIAR DOCUMENTO</span>
+        </a>
+    </div>
+
+    @if (Model.Count() > 0)
+    {
+        <table class='table' id="myTable">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.Files.First().Name)</th>
+                    <th style='text-align: center'>@Html.DisplayNameFor(model => model.UpdatedAt)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var document in Model)
                 {
-                    <tr>
+                    <tr id='@document.Id'>
                         <td style="min-width: 200px;">
                             <div class='box_version'>
                                 @{
@@ -32,19 +48,13 @@
                                 <div class='text_limit'>@document.Title</div>
                             </div>
                         </td>
-                        <td>
+                        <td style="min-width: 150px;">
                             <div class='text_limit' title='@document.Description'>@document.Description</div>
                         </td>
-                        @* <td>
-                <div class='extension'>
-                @document.Files.First().Extension
-                </div>
-                </td> *@
                         <td>
-                            <div class='extension'>
-                                @document.Files.First().Extension
+                            <div class='extension'> @document.Files.First().Extension </div>
+                            <div class='text_limit file_name' title='@document.Files.First().Name'>@document.Files.First().Name
                             </div>
-                            <div class='text_limit file_name'>@document.Files.First().Name</div>
                         </td>
                         <td style='text-align: center'>@document.UpdatedAt</td>
                         <td>
@@ -54,11 +64,11 @@
                                         <a class='db2' tabindex='1'></a>
                                         <a class='material-icons'>more_horiz</a>
                                         <div class='dropdown-content'>
-                                            <a asp-action='Update' asp-route-id='@document.Id'>
+                                            <a asp-action='Update' asp-route-documentId='@document.Id'>
                                                 <i class='material-icons'>edit</i>
                                                 <span>Editar</span>
                                             </a>
-                                            <a asp-action='Delete' asp-route-id='@document.Id'>
+                                            <a asp-action='Delete' asp-route-documentId='@document.Id'>
                                                 <i class='material-icons'>delete</i>
                                                 <span>Excluir</span>
                                             </a>
@@ -66,103 +76,65 @@
                                     </div>
                                 </div>
                                 <a class='material-icons' asp-action='DownloadFile'
-                                    asp-route-id='@document.Files.First().Id'>download</a>
+                                    asp-route-fileId='@document.Files.First().Id'>download</a>
                             </div>
                         </td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
-
-</div>
-
-<div class='container_side'>
-
-    <div class='title'>Detalhes</div>
-
-    <table class='table2'>
-        <tbody>
-            @if (Model != null)
-            {
-                @foreach (var document in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayNameFor(model => model.Title)</td>
-                        <td>@document.Title</td>
-                    </tr>
-                    <tr>
-                        <td>@Html.DisplayNameFor(model => model.Description)</td>
-                        <td>
-                            <div>@document.Description</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>@Html.DisplayNameFor(model => model.CreatedAt)</td>
-                        <td>@document.CreatedAt</td>
-                    </tr>
-                    <tr>
-                        <td>@Html.DisplayNameFor(model => model.UpdatedAt)</td>
-                        <td>@document.UpdatedAt</td>
-                    </tr>
-
-                    break;
-                }
-            }
-        </tbody>
-    </table>
-
-    @if (Model != null)
+            </tbody>
+        </table>
+    }
+    else
     {
-        @foreach (var document in Model)
-        {
-            <div style='display: flex; justify-content: flex-start;margin-bottom: 30px;'>
-                <a class='button' asp-action='Update' asp-route-id='@document.Id'>
-                    <div class='material-icons'>edit</div>
-                    <span>EDITAR</span>
-                </a>
-
-                <a class='button danger' asp-action='Delete' asp-route-id='@document.Id'>
-                    <div class='material-icons'>delete</div>
-                    <span>EXCLUIR</span>
-                </a>
-            </div>
-
-            break;
-        }
+        <div class='empty'>
+            <div class='material-icons' style='margin-right: 7px'>folder_open</div>
+            <span>Nenhum documento encontrado</span>
+        </div>
     }
 
-    <div class='title'>Versões (@Model.First().Files.Count)</div>
-
-    <table class='table3'>
-        <tbody>
-            @if (Model != null)
-            {
-                @foreach (var document in Model)
-                {
-                    @foreach (var file in document.Files)
-                    {
-                        <tr>
-                            <td>@file.Version</td>
-                            <td>
-                                <div title="@file.Name" class='text_limit2'>@file.Name</div>
-                            </td>
-                            <td>
-                                <div class='extension'>@file.Extension</div>
-                            </td>
-                            <td> @file.CreatedAt </td>
-                            <td>
-                                <div class='box_tools'>
-                                    <a class='material-icons' asp-action='DownloadFile' asp-route-id='@file.Id'>download</a>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                    break;
-                }
-            }
-        </tbody>
-    </table>
-
-    <div class='image'></div>
 </div>
+
+
+@{
+    if (Model.Count() > 0)
+    {
+        <div class='container_side'>
+            <div class='content'>
+                @await Html.PartialAsync("Details", Model.First())
+            </div>
+
+            <div id="loader" class="flex" style="display: none;">
+                <svg viewBox="0 0 100 100">
+                    <circle fill="none" cx="50" cy="50" r="30"></circle>
+                </svg>
+            </div>
+        </div>
+    }
+}
+
+@section scripts {
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script>
+        menu(0)
+        @* let table = new DataTable('#myTable'); *@
+
+            $('#myTable').DataTable({
+                order: [[4, 'desc']],
+                "language": {
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": ">",
+                        "previous": "<"
+                    },
+                    "searchPlaceholder": "Pesquisar...",
+                    "search": "",
+                    "zeroRecords": "Nenhum documento encontrado",
+                    "info": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando de 0 até 0 de 0 registros",
+                    "infoFiltered": "(Filtrado por _MAX_ registros)",
+                },
+                "pageLength": 15
+            });
+    </script>
+}

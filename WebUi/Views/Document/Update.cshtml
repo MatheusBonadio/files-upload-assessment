@@ -1,38 +1,42 @@
 @model Domain.Entities.Document
 
 @{
-    ViewData["Title"] = "Alterar";
+    ViewData["Title"] = "Editar documento";
 }
 
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
 <div class='container_body'>
+    <div class='title'>Editar documento</div>
 
-    <h1>Editar</h1>
-
-    <hr />
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <form asp-action="Update" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
+                    <input asp-for="Id" class="form-control" hidden />
+                    <input asp-for="Files[0].Id" class="form-control" hidden />
+                    <input asp-for="Files[0].Version" class="form-control" hidden />
+                    <input asp-for="Files[0].Extension" class="form-control" hidden />
+                    <input asp-for="Files[0].CreatedAt" class="form-control" hidden />
+                    <input asp-for="Files[0].DocumentId" class="form-control" hidden />
+                </div>
+                <div class="form-group">
                     <label asp-for="Title" class="control-label"></label>
-                    <input asp-for="Title" class="form-control" />
+                    <input maxlength="100" asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
+                    <textarea maxlength="2000" asp-for="Description" class="form-control" rows="3"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Arquivo</label>
-                    <input class="form-control" type="file" name='file' />
-                    <span class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="Files[0].Id" class="form-control" readonly />
-                    <input asp-for="Files[0].Version" class="form-control" readonly />
-                    <input asp-for="Files[0].Extension" class="form-control" readonly />
-                    <input asp-for="Files[0].CreatedAt" class="form-control" readonly />
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name='file' />
+                        <label class="custom-file-label" for="customFile">Escolha um arquivo</label>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="Files[0].Name" class="control-label"></label>
@@ -40,19 +44,39 @@
                     <span asp-validation-for="Files[0].Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for="Id" class="form-control" readonly />
+                    <label asp-for="CreatedAt" class="control-label"></label>
                     <input asp-for="CreatedAt" class="form-control" readonly />
-                    <input asp-for="UpdatedAt" class="form-control" readonly />
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Editar" class="btn btn-primary" />
+                    <label asp-for="UpdatedAt" class="control-label"></label>
+                    <input asp-for="UpdatedAt" class="form-control" readonly />
+                </div>
+                <div class="form-group" style='display: flex; align-items: center'>
+                    <input type="submit" id='submit_form' value="EDITAR DOCUMENTO" class="btn btn-primary" hidden />
+                    <label for='submit_form' style='color: #fff; margin-top: 10px;'>
+                        <a class='button'>
+                            <div class='material-icons'>save</div>
+                            <span>SALVAR DOCUMENTO</span>
+                        </a>
+                    </label>
+
+                    <label>
+                        <a class='button' style='margin-left: 15px; margin-top: 10px' asp-action='DownloadFile'
+                            asp-route-fileId='@Model.Files.First().Id'>
+                            <div class='material-icons'>download</div>
+                            <span>BAIXAR ARQUIVO</span>
+                        </a>
+                    </label>
+
+                    <a asp-action="Index" style='color: #000!important; margin-left: 15px'>Voltar</a>
                 </div>
             </form>
         </div>
     </div>
 
-    <div>
-        <a asp-action="Index">Voltar</a>
-    </div>
-
 </div>
+
+@section scripts {
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script>menu(2)</script>
+}

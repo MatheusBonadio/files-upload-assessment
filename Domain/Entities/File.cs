@@ -10,7 +10,6 @@ namespace Domain.Entities
         public Guid Id { get; set; }
 
         [DisplayName("Nome")]
-        [Required(ErrorMessage = "O nome é obrigatório")]
         public string Name { get; set; }
 
         [DisplayName("Versão")]
@@ -18,7 +17,6 @@ namespace Domain.Entities
         public int Version { get; set; }
 
         [DisplayName("Extensão")]
-        [Required(ErrorMessage = "A extensão é obrigatória")]
         public string Extension { get; set; }
 
         [DisplayName("Documento")]

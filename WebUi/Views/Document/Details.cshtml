@@ -4,71 +4,66 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Detalhes</h1>
+<div class='title'>Detalhes</div>
 
-<div>
+<table class='table2'>
+    <tbody>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Title)</td>
+            <td>@Model.Title</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Description)</td>
+            <td>
+                <div>@Model.Description</div>
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.CreatedAt)</td>
+            <td>@Model.CreatedAt</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.UpdatedAt)</td>
+            <td>@Model.UpdatedAt</td>
+        </tr>
+    </tbody>
+</table>
 
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-        @if (Model.Files.Count > 0)
+<div style='display: flex; justify-content: flex-start;margin-bottom: 30px;'>
+    <a class='button' asp-action='Update' asp-route-documentId='@Model.Id'>
+        <div class='material-icons'>edit</div>
+        <span>EDITAR</span>
+    </a>
+
+    <a class='button danger' asp-action='Delete' asp-route-documentId='@Model.Id'>
+        <div class='material-icons'>delete</div>
+        <span>EXCLUIR</span>
+    </a>
+</div>
+
+<div class='title'>Versões (@Model.Files.Count)</div>
+
+<table class='table3'>
+    <tbody>
+        @foreach (var file in Model.Files)
         {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th> @Html.DisplayNameFor(model => model.Files.First().Version) </th>
-                        <th> @Html.DisplayNameFor(model => model.Files.First().Name) </th>
-                        <th> @Html.DisplayNameFor(model => model.Files.First().Extension) </th>
-                        <th> @Html.DisplayNameFor(model => model.Files.First().CreatedAt) </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var file in Model.Files)
-                    {
-                        <tr>
-                            <td> @file.Version </td>
-                            <td> @file.Name </td>
-                            <td> @file.Extension.ToUpper() </td>
-                            <td> @file.CreatedAt </td>
-                            <td><a class="btn btn-primary" asp-action="DownloadFile" asp-route-id="@file.Id">Download</a></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <tr>
+                <td>@file.Version</td>
+                <td>
+                    <div title="@file.Name" class='text_limit2'>@file.Name</div>
+                </td>
+                <td>
+                    <div class='extension'>@file.Extension</div>
+                </td>
+                <td> @file.CreatedAt </td>
+                <td>
+                    <div class='box_tools'>
+                        <a class='material-icons' asp-action='DownloadFile' asp-route-fileId='@file.Id'>download</a>
+                    </div>
+                </td>
+            </tr>
         }
-        @* <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.FileName)
-        </dt>
-        <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.FileName)
-        </dd> *@
-    </dl>
-</div>
-<div>
-    <a asp-action="Update" asp-route-id="@Model.Id">Editar</a> |
-    <a asp-action="Index">Voltar para lista</a>
-</div>
+    </tbody>
+</table>
+
+<div class='image'></div>

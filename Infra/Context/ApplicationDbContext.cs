@@ -20,9 +20,6 @@ namespace Infra
             .Property(d => d.Version)
             .HasDefaultValue(0);
 
-            // modelBuilder.Entity<Document>()
-            //     .HasQueryFilter(d => d.DeletedAt == null);
-
             modelBuilder.Seed();
         }
 

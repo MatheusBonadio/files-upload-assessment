@@ -1,5 +1,14 @@
 # Files Upload Assessment
 
+<p>
+    <img alt='License' src='https://img.shields.io/badge/license-mit-1C1E26?style=for-the-badge&labelColor=1C1E26&color=077CC7&' />
+    <img alt='version' src='https://img.shields.io/badge/version-1.0-1C1E26?style=for-the-badge&labelColor=1C1E26&color=077CC7&' />
+</p>
+
+## 💻 Project
+
+Application for file management with versioning.
+
 ## 📦 Installation and execution
 
 ```bash
